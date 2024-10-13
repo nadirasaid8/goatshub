@@ -1,5 +1,5 @@
 {
-    "use_proxies": false,
+    "sleep_before_start": 5,
     "account_delay": 5,
-    "looping": 3800
-  }  
+    "countdown_loop": 100
+}

@@ -4,7 +4,6 @@ import asyncio
 from datetime import datetime
 from colorama import *
 
-
 mrh = Fore.LIGHTRED_EX
 pth = Fore.LIGHTWHITE_EX
 hju = Fore.LIGHTGREEN_EX
@@ -15,7 +14,7 @@ htm = Fore.LIGHTBLACK_EX
 
 last_log_message = None
 
-def _banner():
+def banner():
     banner = r"""
  ██╗████████╗███████╗     ██╗ █████╗ ██╗    ██╗
  ██║╚══██╔══╝██╔════╝     ██║██╔══██╗██║    ██║
@@ -24,12 +23,12 @@ def _banner():
  ██║   ██║   ███████║╚█████╔╝██║  ██║╚███╔███╔╝
  ╚═╝   ╚═╝   ╚══════╝ ╚════╝ ╚═╝  ╚═╝ ╚══╝╚══╝  """ 
     print(Fore.GREEN + Style.BRIGHT + banner + Style.RESET_ALL)
-    print(hju + f" Script {pth}RealGoats bot {hju}Telegram")
+    print(hju + f" R34lG04ts Telegram bot V2.0.1")
     print(mrh + f" FREE TO USE = Join us on {pth}@DEEPLCHAIN")
     print(mrh + f" before start please '{hju}git pull{mrh}' to update bot")
     log_line()
 
-def _clear():
+def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def read_config():
@@ -50,12 +49,16 @@ def log(message, **kwargs):
         print(f"{htm}[{current_time}] {message}", flush=flush, end=end)
         last_log_message = message
 
+def log_error(message):
+    with open('last.log', 'a') as log_file:
+        log_file.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - ERROR - {message}\n")
+
 def log_line():
     print(pth + "~" * 60)
 
 def awak():
-    _clear()
-    _banner()
+    clear()
+    banner()
     log_line()
 
 async def countdown_timer(seconds):
@@ -70,5 +73,5 @@ async def countdown_timer(seconds):
         await asyncio.sleep(1)
     print(f"{pth}please wait until {h}:{m}:{s} ", flush=True, end="\r")
 
-def _number(number):
+def number(number):
     return "{:,.0f}".format(number)

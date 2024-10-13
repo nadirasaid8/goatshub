@@ -1,33 +1,45 @@
-# Real Go*ts Bot Telegram Automation Script
+# Real Goats Bot Telegram Automation Script
 
-go*tsBot is an automation script for completing missions, checking in, and spinning the slot machine on the Real Go*ts Bot Telegram. This script handles multiple accounts, automates login, mission completion, and daily check-ins.
+GoatsBot is an automation script for completing missions, checking in, and spinning the slot machine on the Real Goats Bot Telegram. This script handles multiple accounts, automates login, mission completion, and daily check-ins.
 
 [TELEGRAM CHANNEL](https://t.me/Deeplchain) | [TWITTER](https://x.com/itsjaw_real)
 
+
+### This bot helpfull?  Please support me by buying me a coffee: 
+```
+0x705C71fc031B378586695c8f888231e9d24381b4 - EVM
+TDTtTc4hSnK9ii1VDudZij8FVK2ZtwChja - TRON
+UQBy7ICXV6qFGeFTRWSpnMtoH6agYF3PRa5nufcTr3GVOPri - TON
+```
+
 ## Register
 
-To use this bot, you need to register it with the go*ts Telegram Bot. 
+To use this bot, you need to register it with the Goats Telegram Bot. 
 
-1. Open the bot [REGISTER](https://t.me/realgoats_bot/run?startapp=99effa5e-ac44-4be5-8f0d-64cf69f796e9)
+1. Open the bot [t.me/R34lgot_real](https://t.me/realgoats_bot/run?startapp=99effa5e-ac44-4be5-8f0d-64cf69f796e9)
 2. Click on the "[Start App](https://t.me/realgoats_bot/run?startapp=99effa5e-ac44-4be5-8f0d-64cf69f796e9)" or "[Open App]([url](https://t.me/realgoats_bot/run?startapp=99effa5e-ac44-4be5-8f0d-64cf69f796e9))" button
-3. Install This Real go*ts Automations Bot
+3. Install This Real Goats Automations Bot
 4. Have Fun 🦈
 
+## Update 2024/10/14
+  - Fix multi proxy usage
+  - Display Menu : run the bot and set `ON` / `OFF`
+  - Instant Setup : save your setup and run easily 
+  - Add Random User Agent 
+
 ## Features
-- **Watching Ads**: automatically watching ads to earn + 500 go*ts `NEW`
-- **Automated Login**: Logs in automatically using account details.
-- **Mission Completion**: Completes available missions and collects rewards.
-- **Daily Check-in**: Checks in daily and collects rewards.
-- **Slot Machine**: Spins the slot machine if coins are available.
+- **Watching Ads**: automatically watching ads `ON` / `OFF`
+- **Mission Completion**: Completes available missions `ON` / `OFF`
+- **Daily Check-in**: Checks in daily and collects rewards. `Auto ON`
+- **Slot Machine**: Spins the slot machine if coins are available. `ON` / `OFF`
 - **Multi-account Support**: Automates For multiple accounts listed in `data.txt`.
-- **Enable Proxies**: To use proxies, set `use_proxies` to `true` in `config.json`.
+- **Enable Proxies**: To use proxies enable **Use Proxy** `ON` in the menu
 
 ## Requirements
 
-- Python 3.7+
+- `Python` 3.10+
 - `aiohttp` for asynchronous HTTP requests
 - `colorama` for colored output
-- Other dependencies listed in `requirements.txt`
 
 ## Setup and Installation
 
@@ -54,20 +66,19 @@ Create a `data.txt` file in the root directory.
 Add Telegram authentication data for each account on a new line:
 
 1. Use PC/Laptop or Use USB Debugging Phone
-2. open the `real go*ts bot`
+2. open the `r34l g04ts bot`
 3. Inspect Element `(F12)` on the keyboard
 4. at the top of the choose "`Application`" 
 5. then select "`Session Storage`" 
-6. Select the links "`dev.go*tsbot.xyz`" and "`tgWebAppData`"
-7. Take the value part of "`tgWebAppData`"
-8. take the part that looks like this: 
+6. Select the links "`dev.g04tsbot.xyz`" and "`"telegram-apps/launch-params`"
+7. Take the value part of "`"tgWebAppPlatform=`"
+8. Decode all the value with https://www.urldecoder.org/
+9. take the part that looks like this: 
 
 ```txt 
 query_id=xxxxxxxxx-1
-query_id=xxxxxxxxx-2
-query_id=xxxxxxxxx-3
 ```
-9. Decode query_id= with https://www.urldecoder.org/
+
 10. add it to `data.txt` file or create it if you dont have one
 
 ### Step 4: Modify Configurations (Optional)
@@ -78,15 +89,18 @@ looping: Time (in seconds) before starting a new loop of account runs.
 ### Configuration
 You can adjust the bot's behavior via config.json:
 
-```json
-{
-    "use_proxies": false,
-    "account_delay": 5,
-    "looping": 3800
-  }  
-```
+  ```json
+  {
+      "sleep_before_start": 5,
+      "account_delay": 5,
+      "countdown_loop": 100
+  } 
+  ```
+`sleep_before_start`: Delay before starting the first run
+
 `account_delay`: Delay in seconds between switching accounts.
-`looping`: Time in seconds to wait before running all accounts again.
+
+`countdown_loop`: Time in seconds to wait before running all accounts again.
 
 ### Format of proxies.txt
 The proxies.txt file should contain one proxy per line in the following format:
@@ -103,17 +117,15 @@ To start the bot, run:
 python main.py
 ```
 
-### Additional Information
-`The script` uses asyncio for asynchronous operations to handle multiple tasks concurrently.
-`Error handling` is implemented to gracefully manage login and mission completion failures.
-Proxy Format The proxies should be listed in a `proxies.txt` file with the format `username:password@ip:port`, one proxy per line.
-Random Proxy Assignment The script will assign a proxy from the list for each account.
+### Instant Setup:
+- **Loading setup via CLI argument:** If the `--setup` argument is provided, the script will load the corresponding `.json` file and run the bot directly without displaying the menu.
+- **Menu display:** If no `--setup` argument is provided, the script will display the menu as usual.
+- **Setup saving:** The option to save setups has been included in the menu as option `8`.
 
-### This bot helpfull?  Please support me by buying me a coffee: 
-```
-0x705C71fc031B378586695c8f888231e9d24381b4 - EVM
-TDTtTc4hSnK9ii1VDudZij8FVK2ZtwChja - TRON
-UQBy7ICXV6qFGeFTRWSpnMtoH6agYF3PRa5nufcTr3GVOPri - TON
+This will allow you to run the script directly with a predefined setup like this:
+
+```bash
+python main.py --setup mysetup
 ```
 
 ## License
