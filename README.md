@@ -1,6 +1,6 @@
-# Real Goats Bot Telegram Automation Script
+# R3al G0ats Bot Telegram Automation Script
 
-GoatsBot is an automation script for completing missions, checking in, and spinning the slot machine on the Real Goats Bot Telegram. This script handles multiple accounts, automates login, mission completion, and daily check-ins.
+G0atsBot is an automation script for completing missions, checking in, and spinning the slot machine on the R3al G0ats Bot Telegram. This script handles multiple accounts, automates login, mission completion, and daily check-ins.
 
 [TELEGRAM CHANNEL](https://t.me/Deeplchain) | [TWITTER](https://x.com/itsjaw_real)
 
