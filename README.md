@@ -2,7 +2,7 @@
 
 G0atsBot is an automation script for completing missions, checking in, and spinning the slot machine on the R3al G0ats Bot Telegram. This script handles multiple accounts, automates login, mission completion, and daily check-ins.
 
-[TELEGRAM CHANNEL](https://t.me/Deeplchain) | [TWITTER](https://x.com/itsjaw_real)
+[TELEGRAM CHANNEL](https://t.me/Deeplchain) | [CONTACT](https://t.me/imspecials)
 
 
 ### This bot helpfull?  Please support me by buying me a coffee: 
@@ -132,4 +132,4 @@ python main.py --setup mysetup
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contact
-For questions or support, please contact [ https://t.me/DeeplChainSup ]
+For questions or support, please contact [ https://t.me/DeeplChain ]
