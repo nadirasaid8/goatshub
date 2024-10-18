@@ -1,10 +1,11 @@
+import sys
 import time
 import json
 import argparse
 from colorama import *
 from .core import GoatsBot
-from .deeplchain import (log, log_line, reset, number, read_config, countdown_timer,
-                             hju, mrh, htm, kng, bru, pth, awak, clear, banner, log_error)
+from . import *
+
 
 config = read_config()
 
@@ -106,62 +107,100 @@ async def run_bot(proxies_enabled, complete_task, auto_spin, watch_ads):
     account_delay = config.get('account_delay', 5)
     proxies = GoatsBot.get_proxies() if proxies_enabled else []
 
-    host_port = 'No proxy'
-    if proxies_enabled and proxies:
-        proxy = proxies[0]
-        if isinstance(proxy, dict):
-            host_port = f"{proxy.get('host', 'unknown_host')}:{proxy.get('port', 'unknown_port')}"
-        else:
-            host_port = proxy.split('@')[-1] if '@' in proxy else proxy
-
     while True:
-        with open("data.txt", "r", encoding="utf-8") as file:
-            accounts = [line.strip() for line in file if line.strip()]
-        
-        for i, auth_data in enumerate(accounts, start=1):
-            log(bru + f"Processing Account: {pth}{i}/{len(accounts)}")
-            log(hju + f"Using proxy: {pth}{host_port}")
-            log(pth + f"~" * 38)
+        try:
+            with open("data.txt", "r", encoding="utf-8") as file:
+                accounts = [line.strip() for line in file if line.strip()]
 
-            proxy = proxies[i % len(proxies)] if proxies_enabled and proxies else None
-            
-            if proxy:
-                host_port = f"{proxy.get('host', 'unknown_host')}:{proxy.get('port', 'unknown_port')}" if isinstance(proxy, dict) else proxy.split('@')[-1] if '@' in proxy else proxy
-            
-            bot = GoatsBot(auth_data.strip(), proxy=proxy)
-            user_data = await bot.user_data()
-            
-            if user_data:
-                log(hju + f"Username: {pth}{user_data.get('user_name')}")
-                log(hju + f"Balance: {pth}{user_data.get('balance'):,.0f} ")
-                log(hju + f"Telegram Age: {pth}{user_data.get('age')} years")
-                await bot.checkin_user()
+            current_proxy_index = 0  # Reset proxy index at the start of each loop
 
-                if complete_task:
-                    await bot.fetch_and_complete_missions()
+            for auth_data in accounts:
+                log(bru + f"Processing Account: {pth}{accounts.index(auth_data) + 1}/{len(accounts)}")
+
+                if proxies_enabled and proxies:
+                    proxy = proxies[current_proxy_index]
+                    host_port = (f"{proxy.get('host', 'unknown_host')}:{proxy.get('port', 'unknown_port')}" 
+                                  if isinstance(proxy, dict) 
+                                  else proxy.split('@')[-1] if '@' in proxy else proxy)
+                    log(hju + f"Using proxy: {pth}{host_port}")
+
+                    # Update the proxy index for the next iteration
+                    current_proxy_index = (current_proxy_index + 1) % len(proxies)
                 else:
-                    log(kng + f"Auto complete task is not activate.")
+                    log(hju + f"Using proxy: {pth}No proxy")
 
-                if auto_spin:
-                    slot_machine_coin = user_data.get('slot_machine_coin', 0)
-                    if slot_machine_coin > 0:
-                        log(pth + f"{slot_machine_coin} {hju}slot machine Coins available")
-                        await bot.spin(slot_machine_coin)
+                log(pth + f"~" * 38)
+
+                bot = GoatsBot(auth_data.strip(), proxy=proxy)
+                user_data = await bot.user_data()
+                
+                if user_data:
+                    log(hju + f"Username: {pth}{user_data.get('user_name')}")
+                    log(hju + f"Balance: {pth}{user_data.get('balance'):,.0f} ")
+                    log(hju + f"Telegram Age: {pth}{user_data.get('age')} years")
+                    await bot.checkin_user()
+
+                    if complete_task:
+                        await bot.fetch_and_complete_missions()
                     else:
-                        log(kng + f"No slot machine coins available.")
-                else:
-                    log(kng + f"Auto Spin slot is not activate.")
+                        log(kng + f"Auto complete task is not activated.")
 
-                if watch_ads:
-                    block_id = 2373
-                    await bot.watch(block_id, bot.user_id)
-                else:
-                    log(kng + f"Auto watching ads is not activate.")
+                    if auto_spin:
+                        slot_machine_coin = user_data.get('slot_machine_coin', 0)
+                        if slot_machine_coin > 0:
+                            log(pth + f"{slot_machine_coin} {hju}slot machine Coins available")
+                            await bot.spin(slot_machine_coin)
+                        else:
+                            log(kng + f"No slot machine coins available.")
+                    else:
+                        log(kng + f"Auto Spin slot is not activated.")
 
-            await bot.http.close()
-            print(pth + f"~" * 60)
-            await countdown_timer(account_delay)        
-        await countdown_timer(loop)
+                    if watch_ads:
+                        block_id = 2373
+                        await bot.watch(block_id, bot.user_id)
+                    else:
+                        log(kng + f"Auto watching ads is not activated.")
+
+                await bot.http.close()
+                print(pth + f"~" * 60)
+                await countdown_timer(account_delay)
+
+            # After processing all accounts, the loop will repeat
+            await countdown_timer(loop)
+        
+        # Reset current_proxy_index after processing all accounts
+
+
+        except HTTPError as e:
+            log(mrh + f"HTTP error occurred check last.log for detail")
+            log_error(f"{str(e)}")
+        except (IndexError, JSONDecodeError) as e:
+            log(mrh + f"Data extraction error: {kng}last.log for detail.")
+            log_error(f"{str(e)}")
+        except ConnectionError:
+            log(mrh + f"Connection lost: {kng}Unable to reach the server.")
+        except Timeout:
+            log(mrh + f"Request timed out: {kng}The server is taking too long to respond.")
+        except ProxyError:
+            log(mrh + f"Proxy error: {kng}Failed to connect through the specified proxy.")
+            if "407" in str(e):
+                log(bru + f"Proxy authentication failed. Trying another.")
+                if proxy:
+                    proxy = random.choice(proxy)
+                    log(bru + f"Switching proxy: {pth}{proxy}")
+                else:
+                    log(mrh + f"No more proxies available.")
+                    break
+            else:
+                log(htm + f"An error occurred: {htm}{e}")
+                break
+        except RequestException as e:
+            log(mrh + f"General request error: {kng}last.log for detail.")
+            log_error(f"{str(e)}")
+        except Exception as e:
+            log(mrh + f"An unexpected error occurred: {kng}last.log for detail.")
+            log_error(f"{str(e)}")
+            return
 
 async def main():
     parser = argparse.ArgumentParser(description="Run the bot with a specified setup.")
@@ -217,7 +256,5 @@ async def main():
                 else:
                     log(mrh + "Invalid choice. Please try again.")
                 time.sleep(1)
-            except Exception as e:
-                log_error(f"{(e)}")
-                await countdown_timer(10)
-                log(mrh + f"An error occurred check last.log!")
+            except KeyboardInterrupt as e:
+                sys.exit()

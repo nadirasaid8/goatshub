@@ -118,8 +118,12 @@ class GoatsBot:
                 return False
 
             if resp_json.get("statusCode"):
-                log(f"Error while logging in | {resp_json['message']}")
-                return False
+                if resp_json.get("statusCode") == 500:
+                    log(bru + f"Query Expired, Please get new query id!")
+                    return False
+                else:
+                    log(f"Error while logging in | {resp_json['message']}")
+                    return False
 
             access_token = resp_json["tokens"]["access"]["token"]
             self.access_token = access_token
@@ -136,11 +140,9 @@ class GoatsBot:
         }
     
     async def user_data(self) -> dict:
-        token_data = await self.load_token(self.user_id)
+        token_data = await self.load_token(self.user_id) or await self.login()
         if not token_data:
-            if not await self.login():
-                log("Login failed.")
-                return {}
+            return {}
         try:
             async with self.http.get("https://api-me.goatsbot.xyz/users/me", headers=self.get_auth_headers()) as resp:
                 content_type = resp.headers.get('Content-Type', '')

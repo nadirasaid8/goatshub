@@ -23,7 +23,7 @@ def banner():
  ██║   ██║   ███████║╚█████╔╝██║  ██║╚███╔███╔╝
  ╚═╝   ╚═╝   ╚══════╝ ╚════╝ ╚═╝  ╚═╝ ╚══╝╚══╝  """ 
     print(Fore.GREEN + Style.BRIGHT + banner + Style.RESET_ALL)
-    print(hju + f" R34lG04ts Telegram bot V2.0.1")
+    print(hju + f" R34lG04ts Telegram bot V2.1.1")
     print(mrh + f" FREE TO USE = Join us on {pth}@DEEPLCHAIN")
     print(mrh + f" before start please '{hju}git pull{mrh}' to update bot")
     log_line()

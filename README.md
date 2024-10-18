@@ -21,8 +21,8 @@ To use this bot, you need to register it with the Goats Telegram Bot.
 3. Install This Real Goats Automations Bot
 4. Have Fun 🦈
 
-## Update 2024/10/14
-  - Fix multi proxy usage
+## Update 2024/10/19
+  - Basic Optimations Scripts
   - Display Menu : run the bot and set `ON` / `OFF`
   - Instant Setup : save your setup and run easily 
   - Add Random User Agent 
