@@ -112,7 +112,7 @@ async def run_bot(proxies_enabled, complete_task, auto_spin, watch_ads):
             with open("data.txt", "r", encoding="utf-8") as file:
                 accounts = [line.strip() for line in file if line.strip()]
 
-            current_proxy_index = 0  # Reset proxy index at the start of each loop
+            current_proxy_index = 0 
 
             for auth_data in accounts:
                 log(bru + f"Processing Account: {pth}{accounts.index(auth_data) + 1}/{len(accounts)}")
@@ -123,8 +123,6 @@ async def run_bot(proxies_enabled, complete_task, auto_spin, watch_ads):
                                   if isinstance(proxy, dict) 
                                   else proxy.split('@')[-1] if '@' in proxy else proxy)
                     log(hju + f"Using proxy: {pth}{host_port}")
-
-                    # Update the proxy index for the next iteration
                     current_proxy_index = (current_proxy_index + 1) % len(proxies)
                 else:
                     log(hju + f"Using proxy: {pth}No proxy")
@@ -164,13 +162,8 @@ async def run_bot(proxies_enabled, complete_task, auto_spin, watch_ads):
                 await bot.http.close()
                 print(pth + f"~" * 60)
                 await countdown_timer(account_delay)
-
-            # After processing all accounts, the loop will repeat
             await countdown_timer(loop)
-        
-        # Reset current_proxy_index after processing all accounts
-
-
+ 
         except HTTPError as e:
             log(mrh + f"HTTP error occurred check last.log for detail")
             log_error(f"{str(e)}")
