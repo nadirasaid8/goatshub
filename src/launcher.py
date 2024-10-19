@@ -117,6 +117,8 @@ async def run_bot(proxies_enabled, complete_task, auto_spin, watch_ads):
             for auth_data in accounts:
                 log(bru + f"Processing Account: {pth}{accounts.index(auth_data) + 1}/{len(accounts)}")
 
+                proxy = None  # Initialize proxy variable
+
                 if proxies_enabled and proxies:
                     proxy = proxies[current_proxy_index]
                     host_port = (f"{proxy.get('host', 'unknown_host')}:{proxy.get('port', 'unknown_port')}" 
@@ -174,12 +176,13 @@ async def run_bot(proxies_enabled, complete_task, auto_spin, watch_ads):
             log(mrh + f"Connection lost: {kng}Unable to reach the server.")
         except Timeout:
             log(mrh + f"Request timed out: {kng}The server is taking too long to respond.")
-        except ProxyError:
+        except ProxyError as e:
             log(mrh + f"Proxy error: {kng}Failed to connect through the specified proxy.")
             if "407" in str(e):
                 log(bru + f"Proxy authentication failed. Trying another.")
-                if proxy:
-                    proxy = random.choice(proxy)
+                if proxies:
+                    current_proxy_index = (current_proxy_index + 1) % len(proxies)
+                    proxy = proxies[current_proxy_index]
                     log(bru + f"Switching proxy: {pth}{proxy}")
                 else:
                     log(mrh + f"No more proxies available.")
